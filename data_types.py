@@ -20,6 +20,11 @@ bool_mask = 255
 bool_shift = 8
 bool_tag = 15
 
+
+wordsize = 4
+
+
+
 def get_type(x: str)->str:
     if x == 'true' or x == 'false':
         return 'boolean'
