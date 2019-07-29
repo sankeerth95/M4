@@ -9,7 +9,11 @@ def emit(code_line: str)-> str:
 def compile_primitive_call(expr: str)->str:
     fn_mapping = {
         'add1': p_ops.add1,
-        'sub1': p_ops.sub1
+        'sub1': p_ops.sub1,
+        'is_int': p_ops.is_int,
+        'is_bool': p_ops.is_boolm,
+        'is_char': p_ops.is_char,
+        'is_zero': p_ops.is_zero
     }
     return fn_mapping[pf.primcall_op(expr)](expr)
 
@@ -21,6 +25,7 @@ def compile_expr(expr: str)->str:
         return compile_primitive_call(expr)
     else:
         return ''
+
 
 def compile_program(program :str)-> str:
     asm: str = ""
@@ -50,7 +55,7 @@ def compile_to_binary(program :str)->int:
     return os.system("gcc -fomit-frame-pointer -m32 rts.c /tmp/compiled.s")
 
 
-def compile_and_run(program: str):
+def compile_and_run(program: str)->None:
     compile_to_binary(program)
     os.system('./a.out > output.txt')
     with open('output.txt', "r") as fp:

@@ -6,7 +6,7 @@ def is_primcall(form: str) -> bool:
 def primcall_op(form: str)->str:
     return form.split()[1]
 
-def primcall_args_list(str: expr)->list[str]:
+def args_list(expr: str)->list[str]:
     return expr.split()[2:]
 
 def is_immediate(expr: str)-> bool:

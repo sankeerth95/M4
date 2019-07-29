@@ -16,7 +16,7 @@ char_mask = 255
 char_shift = 8
 char_tag = 7
 
-bool_maask = 255
+bool_mask = 255
 bool_shift = 8
 bool_tag = 15
 
