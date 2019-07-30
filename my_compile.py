@@ -15,8 +15,12 @@ def compile_primitive_call(expr: str, si: int)->str:
         'is_bool': p_ops.is_boolm,
         'is_char': p_ops.is_char,
         'is_zero': p_ops.is_zero,
-        '+': p_ops.binary_add,
-        '-': p_ops.binary_sub 
+        '+': p_ops.int_add,
+        '-': p_ops.int_sub,
+        '*': p_ops.int_mul,
+        '==': p_ops.int_eq,
+        '<': p_ops.int_lt,
+        'c==': p_ops.char_eq,
     }
     return fn_mapping[pf.primcall_op(expr)](expr, si)
 

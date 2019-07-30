@@ -54,7 +54,7 @@ def is_zero(expr: str, si: int)->str:
     return asm
 
 
-def binary_add(expr: str, si: int)->str:
+def int_add(expr: str, si: int)->str:
     asm: str = ''
     asm += cmp.compile_expr(pf.args_list(expr)[0], si)
     asm += cmp.emit('movl %eax, '+si+'(%esp)')
@@ -63,10 +63,59 @@ def binary_add(expr: str, si: int)->str:
     return asm
 
 
-def binary_sub(expr: str, si: int) -> str:
+def int_sub(expr: str, si: int) -> str:
     asm: str = ''
     asm += cmp.compile_expr(pf.args_list(expr)[0], si)
     asm += cmp.emit('movl %eax, '+si+'(%esp)')
     asm += cmp.compile_expr(pf.args_list(expr)[1], si-dt.wordsize)
     asm += cmp.emit('subl ' + si+'(%esp), %eax')
+    return asm
+
+
+def int_mul(expr: str, si: int) -> str:
+    asm: str = ''
+    asm += cmp.compile_expr(pf.args_list(expr)[0], si)
+    asm += cmp.emit('movl %eax, '+si+'(%esp)')
+    asm += cmp.compile_expr(pf.args_list(expr)[1], si-dt.wordsize)
+    asm += cmp.emit('shrl $'+dt.fixnum_shift + ', %eax')
+    asm += cmp.emit('imull ' + si+'(%esp), %eax')
+    return asm
+
+
+def int_eq(expr: str, si: int) -> str:
+    asm: str = ''
+    asm += cmp.compile_expr(pf.args_list(expr)[0], si)
+    asm += cmp.emit('movl %eax, '+si+'(%esp)')
+    asm += cmp.compile_expr(pf.args_list(expr)[1], si-dt.wordsize)
+    asm += cmp.emit('cmpl ' + si+'(%esp), %eax')
+    asm += cmp.emit('xorl %eax, %eax')
+    asm += cmp.emit('sete %al')
+    asm += cmp.emit('sall $'+dt.bool_shift+', %eax')
+    asm += cmp.emit('orl $'+dt.bool_tag+', %eax')
+    return asm
+
+
+def int_lt(expr: str, si: int) -> str:
+    asm: str = ''
+    asm += cmp.compile_expr(pf.args_list(expr)[0], si)
+    asm += cmp.emit('movl %eax, '+si+'(%esp)')
+    asm += cmp.compile_expr(pf.args_list(expr)[1], si-dt.wordsize)
+    asm += cmp.emit('cmpl ' + si+'(%esp), %eax')
+    asm += cmp.emit('xorl %eax, %eax')
+    asm += cmp.emit('setl %al')
+    asm += cmp.emit('sall $'+dt.bool_shift+', %eax')
+    asm += cmp.emit('orl $'+dt.bool_tag+', %eax')
+    return asm
+
+
+def char_eq(expr: str, si: int) -> str:
+    asm: str = ''
+    asm += cmp.compile_expr(pf.args_list(expr)[0], si)
+    asm += cmp.emit('movl %eax, '+si+'(%esp)')
+    asm += cmp.compile_expr(pf.args_list(expr)[1], si-dt.wordsize)
+    asm += cmp.emit('cmpl ' + si+'(%esp), %eax')
+    asm += cmp.emit('xorl %eax, %eax')
+    asm += cmp.emit('sete %al')
+    asm += cmp.emit('sall $'+dt.bool_shift+', %eax')
+    asm += cmp.emit('orl $'+dt.bool_tag+', %eax')
     return asm
