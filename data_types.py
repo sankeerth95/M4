@@ -34,7 +34,7 @@ def get_type(x: str)->str:
 def immediate_rep(x: str)->str:
     datatype = get_type(x)
     if datatype == 'int':
-        return str(int_mask &(int(x) << fixnum_shift))
+        return str(fixnum_mask &(int(x) << fixnum_shift))
     elif datatype == 'char':
         return str(char_tag | (ord(x[1]) << char_shift))
     elif datatype == 'boolean':
