@@ -7,7 +7,7 @@ def emit(code_line: str)-> str:
     return(code_line + "\n")
 
 # si: stack index
-def compile_primitive_call(expr: str, si: int)->str:
+def compile_primitive_call(expr: str, si: int, env: dict)->str:
     fn_mapping: dict = {
         'add1': p_ops.add1,
         'sub1': p_ops.sub1,
@@ -24,14 +24,20 @@ def compile_primitive_call(expr: str, si: int)->str:
     }
     return fn_mapping[pf.primcall_op(expr)](expr, si)
 
-def compile_expr(expr: str, si: int)->str:
 
+def compile_let(expr: str, si: int, env: dict) -> str:
+
+    return ''
+
+
+def compile_expr(expr: str, si: int, env: dict)->str:
+    env :dict = {}
     if pf.is_immediate(expr):
         return emit("movl $" + dt.immediate_rep(expr) + ", %eax")
     elif pf.is_primcall(expr):
         return compile_primitive_call(expr, si)
-    else:
-        return ''
+    elif pf.is_assignment(expr):
+        return compile_let(expr, si, env)
 
 
 def compile_program(program :str)-> str:
@@ -46,7 +52,7 @@ def compile_program(program :str)-> str:
     asm += emit("pushl %edi")
     asm += emit("pushl %edx")
 
-    asm += compile_expr(program, -dt.wordsize)
+    asm += compile_expr(program, -dt.wordsize, {})
 
     asm += emit("popl %edx")
     asm += emit("popl %edi")
